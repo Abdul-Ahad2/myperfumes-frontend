@@ -1,23 +1,33 @@
+"use client";
+
+import axios from "axios";
 import { DM_Sans } from "next/font/google";
+import { useEffect, useState } from "react";
 import { IoIosThumbsDown } from "react-icons/io";
 import { IoIosThumbsUp } from "react-icons/io";
+import { Toaster, toast } from "sonner";
 
-const dmsans = DM_Sans({
-  weight: "300",
-  subsets: ["latin"],
-});
 const dmsans_bold = DM_Sans({
   weight: "900",
   subsets: ["latin"],
-});
-
-const dmsans_base = DM_Sans({
-  weight: "600",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export default function product(context) {
+  const [products, setProducts] = useState([]);
   const { perfume_title } = context.params;
+  useEffect(() => {
+    (async () => {
+      setProducts(
+        (
+          await axios.get(
+            `http://localhost:8000/api/products/get${perfume_title}`
+          )
+        ).data.data
+      );
+    })();
+  });
+
   return (
     <>
       <div>
@@ -30,45 +40,77 @@ export default function product(context) {
         </div>
 
         <div className="w-full sm:px-24 sm:py-10 p-4">
-          <div className="grid sm:grid-cols-3 grid-cols-1 gap-3">
-            <div className="w-full sm:h-[57vh] h-[47vh] bg-gray-600 rounded-md shadow-2xl relative">
-              <div className="sm:h-[40vh] h-[30vh] w-full relative">
-                <img
-                  src="https://images.pexels.com/photos/1190829/pexels-photo-1190829.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Product Image"
-                  className="h-full w-full object-cover rounded-t-md"
-                />
-                <div className="absolute inset-0 bg-black opacity-0 hover:opacity-70 transition-opacity rounded-t-md flex items-center justify-center h-auto duration-300 p-10">
-                  <div>
-                    <p className="text-white text-xl text-center">
-                      A sophisticated blend of floral and woody notes, ideal for
-                      everyday elegance and allure.
-                    </p>
-                    <div className="text-white flex justify-center h-auto text-2xl">
-                      <IoIosThumbsUp className="m-2 hover:text-gray-500 hover:scale-125 cursor-pointer transition-all duration-300 " />
-                      <div className="text-base m-2 ">12.3k</div>
-                      <IoIosThumbsDown className="m-2 hover:text-gray-500 hover:scale-125 cursor-pointer transition-all duration-300 " />
-                      <div className="text-base m-2">10.7k</div>
+          <div className="grid sm:grid-cols-3 grid-cols-1 gap-10">
+            {products.map((val) => {
+              return (
+                <>
+                  <div className="w-full sm:h-[57vh] h-[47vh] bg-gray-100 border-8 border-gray-100  shadow-2xl relative">
+                    <div className="sm:h-[40vh] h-[30vh] w-full relative">
+                      <img
+                        src={val.src}
+                        className="h-full w-full object-cover rounded-none"
+                      />
+                      <div className="absolute inset-0 bg-black opacity-0 hover:opacity-70 transition-opacity rounded-none flex items-center justify-center h-auto duration-300 p-10">
+                        <div>
+                          <p className="text-white text-xl text-center">
+                            {val.description}
+                          </p>
+                          <div className="text-white flex justify-center h-auto text-2xl">
+                            <IoIosThumbsUp className="m-2 hover:text-gray-500 hover:scale-125 cursor-pointer transition-all duration-300 " />
+                            <div className="text-base m-2 ">{val.likes}</div>
+                            <IoIosThumbsDown className="m-2 hover:text-gray-500 hover:scale-125 cursor-pointer transition-all duration-300 " />
+                            <div className="text-base m-2">{val.dislikes}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="h-[9vh] flex items-center p-2 w-full bg-gray-100 text-gray-900 text-2xl justify-between">
+                      <div>
+                        <div
+                          className={`${dmsans_bold.className} tracking-tighter`}
+                        >
+                          {val.title}
+                        </div>
+                        <div className="text-base">{val.small_desc}</div>
+                      </div>
+                      <h1
+                        className={`${dmsans_bold.className} tracking-tighter`}
+                      >
+                        ${val.price}.00
+                      </h1>
+                    </div>
+
+                    <div className="h-[6vh] w-full flex">
+                      <button
+                        className="w-full bg-gray-700  flex items-center justify-center text-gray-100 text-2xl hover:bg-gray-900 hover:scale-95 transition-all hover:text-gray-100 duration-500 border-2 rounded-md"
+                        onClick={async () => {
+                          try {
+                            const check = await axios.post(
+                              "http://localhost:8000/api/cart/addCartItem",
+                              {
+                                user_id: localStorage.getItem("userId"),
+                                title: val.title,
+                                price: val.price,
+                                src: val.src,
+                              }
+                            );
+                            toast.success(check.data.data);
+                          } catch (error) {
+                            toast.error("Error in adding to cart");
+                          }
+                        }}
+                      >
+                        <h1
+                          className={`${dmsans_bold.className} tracking-tighter`}
+                        >
+                          Add To Cart
+                        </h1>
+                      </button>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="h-[7vh] w-full bg-gray-700 flex items-center justify-center text-gray-200 text-2xl">
-                <div className={`${dmsans_base.className} tracking-tighter`}>
-                  Perfume Title
-                </div>
-              </div>
-              <div className="h-[10vh] w-full flex">
-                <div className="w-[40%] bg-gray-800 rounded-bl-md flex items-center justify-center text-gray-200 text-2xl">
-                  <h1 className="tracking-tighter">$1,200.00</h1>
-                </div>
-                <button className="w-[60%] bg-gray-900 rounded-br-md flex items-center justify-center text-gray-200 text-2xl hover:bg-gray-600 hover:scale-95 transition-transform duration-200">
-                  <h1 className={`${dmsans_bold.className} tracking-tighter`}>
-                    Add To Cart
-                  </h1>
-                </button>
-              </div>
-            </div>
+                </>
+              );
+            })}
           </div>
         </div>
       </div>

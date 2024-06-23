@@ -45,7 +45,7 @@ export default function Home() {
               <div className="flex justify-center">
                 <button
                   onClick={handleScrollToExplore}
-                  className="text-opacity-0 text-center bg-white px-7 py-5 mt-5 text-lg sm:text-xl"
+                  className="text-opacity-0 text-center bg-white px-7 py-5 mt-5 text-lg sm:text-xl transition-all duration-500 hover:rounded-xl"
                 >
                   Get Now
                 </button>
