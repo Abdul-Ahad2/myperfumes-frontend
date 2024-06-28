@@ -31,10 +31,6 @@ export const signInController = () => {
       });
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.customData.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
       toast.error("Error while signing in.");
     });
 };

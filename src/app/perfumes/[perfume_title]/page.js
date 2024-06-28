@@ -18,13 +18,17 @@ export default function product(context) {
   const { perfume_title } = context.params;
   useEffect(() => {
     (async () => {
-      setProducts(
-        (
-          await axios.get(
-            `http://localhost:8000/api/products/get${perfume_title}`
-          )
-        ).data.data
-      );
+      try {
+        setProducts(
+          (
+            await axios.get(
+              `http://localhost:8000/api/products/get${perfume_title}`
+            )
+          ).data.data
+        );
+      } catch (error) {
+        toast.message("Network Error. Please try again later.");
+      }
     })();
   });
 

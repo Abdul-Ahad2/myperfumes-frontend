@@ -101,13 +101,19 @@ export default function Cart() {
                           <FaPlusCircle
                             className="m-1 text-base md:text-xl hover:scale-125 transition-all duration-200 cursor-pointer"
                             onClick={async () => {
-                              await axios.put(
-                                "http://localhost:8000/api/cart/addQuantity",
-                                {
-                                  userId: localStorage.getItem("userId"),
-                                  title: val.title,
-                                }
-                              );
+                              try {
+                                await axios.put(
+                                  "http://localhost:8000/api/cart/addQuantity",
+                                  {
+                                    userId: localStorage.getItem("userId"),
+                                    title: val.title,
+                                  }
+                                );
+                              } catch (error) {
+                                toast.message(
+                                  "Network Error. Please try again later."
+                                );
+                              }
                             }}
                           />
                           <div className="m-1 text-base md:text-xl">
@@ -116,15 +122,21 @@ export default function Cart() {
                           <FaMinusCircle
                             className="m-1 text-base md:text-xl hover:scale-125 transition-all duration-200 cursor-pointer"
                             onClick={async () => {
-                              const res = await axios.put(
-                                "http://localhost:8000/api/cart/subtractQuantity",
-                                {
-                                  userId: localStorage.getItem("userId"),
-                                  title: val.title,
+                              try {
+                                const res = await axios.put(
+                                  "http://localhost:8000/api/cart/subtractQuantity",
+                                  {
+                                    userId: localStorage.getItem("userId"),
+                                    title: val.title,
+                                  }
+                                );
+                                if (res.status == 203) {
+                                  toast.success(res.data.data);
                                 }
-                              );
-                              if (res.status == 203) {
-                                toast.success(res.data.data);
+                              } catch (error) {
+                                toast.message(
+                                  "Network Error. Please try again later."
+                                );
                               }
                             }}
                           />
@@ -146,7 +158,7 @@ export default function Cart() {
 
                           toast.success(message.data.data);
                         } catch (error) {
-                          console.log("error deleting from cart", error);
+                          console.log("Error deleting from cart", error);
                         }
                       }}
                     >

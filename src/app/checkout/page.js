@@ -35,12 +35,16 @@ export default function Checkout() {
   });
   useEffect(() => {
     (async () => {
-      const items = (
-        await axios.get("http://localhost:8000/api/cart/getCartItems", {
-          params: { userId: localStorage.getItem("userId") },
-        })
-      ).data.data;
-      setOrderItems(items);
+      try {
+        const items = (
+          await axios.get("http://localhost:8000/api/cart/getCartItems", {
+            params: { userId: localStorage.getItem("userId") },
+          })
+        ).data.data;
+        setOrderItems(items);
+      } catch (error) {
+        toast.message("Network Error. Please try again later.");
+      }
     })();
   });
   const totalPrice = orderItems.reduce(
