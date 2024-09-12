@@ -24,11 +24,14 @@ export const signInController = () => {
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
       toast.success(`Signed in as ${userName}`);
-      axios.post("http://localhost:8000/api/user/createUser", {
-        _id: userId,
-        username: userName,
-        email: userEmail,
-      });
+      axios.post(
+        "https://myperfumes-backend.onrender.com/api/user/createUser",
+        {
+          _id: userId,
+          username: userName,
+          email: userEmail,
+        }
+      );
     })
     .catch((error) => {
       toast.error("Error while signing in.");

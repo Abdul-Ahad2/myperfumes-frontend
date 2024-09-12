@@ -37,9 +37,12 @@ export default function Checkout() {
     (async () => {
       try {
         const items = (
-          await axios.get("http://localhost:8000/api/cart/getCartItems", {
-            params: { userId: localStorage.getItem("userId") },
-          })
+          await axios.get(
+            "https://myperfumes-backend.onrender.com/api/cart/getCartItems",
+            {
+              params: { userId: localStorage.getItem("userId") },
+            }
+          )
         ).data.data;
         setOrderItems(items);
       } catch (error) {
@@ -150,7 +153,7 @@ export default function Checkout() {
                     e.preventDefault();
                     try {
                       const response = await axios.post(
-                        "http://localhost:8000/api/order/placeOrder",
+                        "https://myperfumes-backend.onrender.com/api/order/placeOrder",
                         {
                           user_id: localStorage.getItem("userId"),
                           total_amount: totalPrice,

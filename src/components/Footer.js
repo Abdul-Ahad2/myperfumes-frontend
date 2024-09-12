@@ -48,7 +48,7 @@ export default function Footer() {
                 onClick={async () => {
                   try {
                     const response = await axios.post(
-                      "http://localhost:8000/api/user/subscribeUser",
+                      "https://myperfumes-backend.onrender.com/api/user/subscribeUser",
                       { email: userEmail }
                     );
                     toast.success(response.data.data);

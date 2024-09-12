@@ -33,7 +33,7 @@ export default function Cart() {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/cart/getCartItems",
+          "https://myperfumes-backend.onrender.com/api/cart/getCartItems",
           {
             params: { userId: localStorage.getItem("userId") },
           }
@@ -103,7 +103,7 @@ export default function Cart() {
                             onClick={async () => {
                               try {
                                 await axios.put(
-                                  "http://localhost:8000/api/cart/addQuantity",
+                                  "https://myperfumes-backend.onrender.com/api/cart/addQuantity",
                                   {
                                     userId: localStorage.getItem("userId"),
                                     title: val.title,
@@ -124,7 +124,7 @@ export default function Cart() {
                             onClick={async () => {
                               try {
                                 const res = await axios.put(
-                                  "http://localhost:8000/api/cart/subtractQuantity",
+                                  "https://myperfumes-backend.onrender.com/api/cart/subtractQuantity",
                                   {
                                     userId: localStorage.getItem("userId"),
                                     title: val.title,
@@ -149,7 +149,7 @@ export default function Cart() {
                       onClick={async () => {
                         try {
                           const message = await axios.delete(
-                            `http://localhost:8000/api/cart/deleteCartItem/${encodeURIComponent(
+                            `https://myperfumes-backend.onrender.com/api/cart/deleteCartItem/${encodeURIComponent(
                               val.title
                             )}/${encodeURIComponent(
                               localStorage.getItem("userId")

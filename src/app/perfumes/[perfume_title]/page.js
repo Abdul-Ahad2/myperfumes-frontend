@@ -22,7 +22,7 @@ export default function product(context) {
         setProducts(
           (
             await axios.get(
-              `http://localhost:8000/api/products/get${perfume_title}`
+              `https://myperfumes-backend.onrender.com/api/products/get${perfume_title}`
             )
           ).data.data
         );
@@ -90,7 +90,7 @@ export default function product(context) {
                         onClick={async () => {
                           try {
                             const check = await axios.post(
-                              "http://localhost:8000/api/cart/addCartItem",
+                              "https://myperfumes-backend.onrender.com/api/cart/addCartItem",
                               {
                                 user_id: localStorage.getItem("userId"),
                                 title: val.title,
